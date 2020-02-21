@@ -1,0 +1,336 @@
+# version 0
+# 规则描述来源于 WIKI https://minecraft-zh.gamepedia.com/%E5%91%BD%E4%BB%A4/gamerule
+
+# 支持 & 转 §
+# 变量 %RULE% 当前规则名称
+# 变量 %WORLD_NAME% 世界名
+# 变量 %VALUE% 当前规则的值
+# 变量 %DEFAULT_VALUE% 当前规则的默认值
+# 变量 %PLAYER% 当前玩家
+# 支持变量的节点：
+# rules-title GUI标题(只支持 %WORLD_NAME%)
+# rules.<rule>.title 物品标题
+# rules.<rule>.description 物品描述
+
+# 统一物品的描点
+rule-item: &rule-item
+  item: 'book'
+
+# GUI 标题
+# 变量 %WORLD_NAME% 获取当前世界的名称
+rules-title: '%WORLD_NAME% 的游戏规则'
+# GUI 格子大小，0 为自适应，最大为 6(6*9)
+rules-row: 3
+rules:
+  # 规则名称，如果没有游戏本身没有该规则则无效
+  announceAdvancements:
+    # 物品名称
+    title: '§f聊天框中显示进度'
+    # 物品类型
+    item: 'book'
+    # 物品描述
+    description:
+      - '§7%RULE%'
+      - '§5在聊天框中显示进度的达成'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+      - '§7  e.g:'
+      - '§fPlayer获得了进度§a[钻石！]'
+
+  commandBlockOutput:
+    item: 'command_block'
+    title: '§f聊天框中显示命令方块输出结果'
+    description:
+      - '§7%RULE%'
+      - '§5命令方块执行命令时是否在聊天框中向管理员显示'
+      - '§7相关规则 logAdminCommands'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+      - '§7  e.g:'
+      - '§o§7[@: 已清除%PLAYER%]'
+
+  disableElytraMovementCheck:
+    item: 'elytra'
+    title: '§f禁用鞘翅检测'
+    description:
+      - '§7%RULE%'
+      - '§5是否让服务器停止检查使用鞘翅玩家的移动速度'
+      - '§5有助于减轻因服务器延迟而导致的飞行卡顿'
+      - '§5但有可能导致生存模式下玩家飞行过快'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  disableRaids:
+    <<: *rule-item
+    title: '§f禁用村庄袭击'
+    description:
+      - '§7%RULE%'
+      - '§5是否禁用村庄袭击'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doDaylightCycle:
+    item: 'clock'
+    title: '§f日夜交替和月相变化'
+    description:
+      - '§7%RULE%'
+      - '§5是否进行日夜交替和月相变化'
+      - '§5将时间在此刻停止'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doEntityDrops:
+    <<: *rule-item
+    title: '§f非生物实体是否掉落物品'
+    description:
+      - '§7%RULE%'
+      - '§5非生物实体是否掉落物品'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doFireTick:
+    item: 'torch'
+    title: '§f火是否蔓延及自然熄灭'
+    description:
+      - '§7%RULE%'
+      - '§5火是否蔓延及自然熄灭'
+      - '§5false 火不会蔓延，且不会自然熄灭'
+      - '§5true  火会蔓延'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doImmediateRespawn:
+    item: 'totem_of_undying'
+    title: '§f玩家死亡时直接重生'
+    description:
+      - '§7%RULE%'
+      - '§5玩家死亡时是否不显示死亡界面直接重生'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doInsomnia:
+    item: 'phantom_spawn_egg'
+    title: '§f幻翼是否在夜晚生成'
+    description:
+      - '§7%RULE%'
+      - '§5幻翼是否在夜晚生成'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doLimitedCrafting:
+    <<: *rule-item
+    title: '§f合成配方需要解锁才能使用'
+    description:
+      - '§7%RULE%'
+      - '§5玩家的合成配方是否需要解锁才能使用'
+      - '§5相关命令 /recipe'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doMobLoot:
+    <<: *rule-item
+    title: '§f生物在死亡是否掉落物品'
+    description:
+      - '§7%RULE%'
+      - '§5生物在死亡是否掉落物品'
+      - '§5玩家不受此规则影响'
+      - '§5相关规则 keepInventory'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doMobSpawning:
+    <<: *rule-item
+    title: '§f生物自然生成'
+    description:
+      - '§7%RULE%'
+      - '§5生物是否自然生成。不影响刷怪箱'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doPatrolSpawning:
+    <<: *rule-item
+    title: '§f生成灾厄巡逻队'
+    description:
+      - '§7%RULE%'
+      - '§5控制灾厄巡逻队的生成'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doTileDrops:
+    <<: *rule-item
+    title: '§f破坏方块掉落物品'
+    description:
+      - '§7%RULE%'
+      - '§5方块被破坏时是否掉落物品'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doTraderSpawning:
+    <<: *rule-item
+    title: '§f生成流浪商人'
+    description:
+      - '§7%RULE%'
+      - '§5控制流浪商人的生成'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  doWeatherCycle:
+    item: 'daylight_detector'
+    title: '§f天气是否变化'
+    description:
+      - '§7%RULE%'
+      - '§5控制天气是否变化'
+      - '§5一直保持当前的天气状态'
+      - '§5相关命令 /weather'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  drowningDamage:
+    <<: *rule-item
+    title: '§f窒息伤害'
+    description:
+      - '§7%RULE%'
+      - '§5玩家是否承受窒息伤害'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  fallDamage:
+    <<: *rule-item
+    title: '§f跌落伤害'
+    description:
+      - '§7%RULE%'
+      - '§5玩家是否承受跌落伤害'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  fireDamage:
+    <<: *rule-item
+    title: '§f火焰伤害'
+    description:
+      - '§7%RULE%'
+      - '§5玩家是否会承受火焰伤害'
+      - '§5附魔火焰附加与火矢受此影响'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  keepInventory:
+    item: 'totem_of_undying'
+    title: '§f死亡不掉落'
+    description:
+      - '§7%RULE%'
+      - '§5玩家死亡后是否保留物品栏物品、经验'
+      - '§5死亡时物品不掉落、经验不清空'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  logAdminCommands:
+    <<: *rule-item
+    title: '§f日志记录管理员执行过的命令'
+    description:
+      - '§7%RULE%'
+      - '§5是否在服务器日志中记录管理员使用过的命令'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  maxCommandChainLength:
+    item: 'command_block'
+    title: '§f连锁命令方块能“连锁”的总数量'
+    description:
+      - '§7%RULE%'
+      - '§5决定了连锁型命令方块能“连锁”的总数量'
+      - '§5最大为值 65536'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  maxEntityCramming:
+    <<: *rule-item
+    title: '§f最大挤在一起的实体数量'
+    description:
+      - '§7%RULE%'
+      - '§5玩家或生物能同时推动其他可推动实体的数量'
+      - '§5超过此数量时将承受每半秒3点的窒息伤害'
+      - '§5设置成0可以停用这个规则'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  mobGriefing:
+    <<: *rule-item
+    title: '§f生物是否能放置、修改或破坏方块'
+    description:
+      - '§7%RULE%'
+      - '§5生物是否能放置、修改或破坏方块'
+      - '§5生物是否能捡拾物品'
+      - '§5玩家不受此规则影响'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  naturalRegeneration:
+    <<: *rule-item
+    title: '§f玩家是否能自然恢复生命值'
+    description:
+      - '§7%RULE%'
+      - '§5玩家是否能在饥饿值足够时自然恢复生命值'
+      - '§5不影响外部治疗效果'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  randomTickSpeed:
+    item: 'feather'
+    title: '§f随机刻速度'
+    description:
+      - '§7%RULE%'
+      - '§5每游戏刻每区段中随机的方块刻发生的频率'
+      - '§5植物生长，树叶腐烂等'
+      - '§50 为禁用随机刻'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  reducedDebugInfo:
+    item: 'debug_stick'
+    title: '§f简化调试屏幕信息'
+    description:
+      - '§7%RULE%'
+      - '§5调试屏幕是否简化而非显示详细信息'
+      - '§5实体碰撞箱和区块边界效果不会显示'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  sendCommandFeedback:
+    item: 'command_block'
+    title: '§f显示命令的返回信息'
+    description:
+      - '§7%RULE%'
+      - '§5命令的返回信息是否在聊天框中显示'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+      - '§7  e.g:'
+      - '§f已清除%PLAYER%'
+
+  showDeathMessages:
+    <<: *rule-item
+    title: '§f显示玩家以及驯养宠物死亡信息'
+    description:
+      - '§7%RULE%'
+      - '§5是否在聊天框中显示玩家以及驯养宠物的死亡信息'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+      - '§7  e.g:'
+      - '§f%PLAYER%掉出了这个世界'
+
+  spawnRadius:
+    item: 'totem_of_undying'
+    title: '§f重生范围'
+    description:
+      - '§7%RULE%'
+      - '§5没有重生点的玩家在重生时与世界重生点坐标的距离'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
+  spectatorsGenerateChunks:
+    <<: *rule-item
+    title: '§f旁观模式的玩家生成区块'
+    description:
+      - '§7%RULE%'
+      - '§5是否允许旁观模式的玩家生成区块'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'

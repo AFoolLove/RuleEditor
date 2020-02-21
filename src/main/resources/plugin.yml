@@ -1,0 +1,6 @@
+name: RuleEditor
+version: ${project.version}
+main: me.inshin.ruleeditor.RuleEditor
+api-version: '1.13'
+authors: [InShin]
+description: gamerule editor
