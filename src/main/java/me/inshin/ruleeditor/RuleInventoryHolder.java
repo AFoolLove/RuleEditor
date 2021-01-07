@@ -8,6 +8,7 @@ import me.inshin.ruleeditor.prompt.BoolPrompt;
 import me.inshin.ruleeditor.prompt.IntPrompt;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationFactory;
@@ -28,17 +29,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RuleInventoryHolder implements InventoryHolder, Listener {
     final Plugin plugin;
 
     final Inventory inventory = Bukkit.createInventory(null, 9, "\u7231\u4f60\u54e6\u2606~");
-    final Map<String, Inventory> inventories = new ConcurrentHashMap<>();
+    public final Map<String, Inventory> inventories = new ConcurrentHashMap<>(); // world name -> rule gui
 
     public RuleInventoryHolder(@NotNull Plugin plugin) {
         this.plugin = plugin;
@@ -56,7 +54,15 @@ public class RuleInventoryHolder implements InventoryHolder, Listener {
             List<HumanEntity> viewers = event.getInventory().getViewers();
             viewers.remove(event.getPlayer());
             if (viewers.isEmpty()) {
-                this.inventories.remove(event.getPlayer().getWorld().getName(), event.getInventory());
+                // 当没有玩家打开GUI时，移除GUI数据
+                Iterator<Map.Entry<String, Inventory>> iterator = this.inventories.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, Inventory> entry = iterator.next();
+                    if (entry.getValue() == event.getInventory()) {
+                        iterator.remove();
+                        break;
+                    }
+                }
             }
             if (this.inventories.isEmpty()) {
                 tagEnd();
@@ -141,17 +147,21 @@ public class RuleInventoryHolder implements InventoryHolder, Listener {
                         viewer.closeInventory();
                     }
                 }
+
             }
         }
     }
 
+    /**
+     * 跟目标发起一个更改规则值的会话
+     */
     private static void conversation(@NotNull Plugin plugin, @NotNull Conversable conversable, @NotNull World world, @NotNull GameRule<?> gameRule) {
         if (conversable.isConversing()) {
             return;
         }
         ConversationFactory conversationFactory = new ConversationFactory(plugin);
         conversationFactory.withLocalEcho(false);
-        conversationFactory.withTimeout(15);
+        conversationFactory.withTimeout(plugin.getConfig().getInt("rules-timeout", 15));
         if (gameRule.getType() == Boolean.class) {
             conversationFactory.withFirstPrompt(new BoolPrompt(world, (GameRule) gameRule));
         } else if (gameRule.getType() == Integer.class) {
@@ -171,6 +181,16 @@ public class RuleInventoryHolder implements InventoryHolder, Listener {
         String rule = tagGet(itemStack, key);
         if (rule != null) {
             ConfigurationSection ruleSection = this.plugin.getConfig().getConfigurationSection("rules." + rule);
+            if (ruleSection == null && this.plugin.getConfig().getBoolean("rules-show-all")) {
+                ruleSection = this.plugin.getConfig().getConfigurationSection("rules-out-item");
+                if (ruleSection == null) {
+                    ruleSection = new MemoryConfiguration();
+                    ruleSection.set("item", "enchanted_book");
+                    ruleSection.set("title", "§f%RULE%");
+                    ruleSection.set("description", Arrays.asList("§7%RULE%", "§5%VALUE%/%DEFAULT_VALUE%"));
+                }
+            }
+
             if (ruleSection != null) {
                 String displayName = ruleSection.getString("title");
                 if (displayName != null) {
@@ -215,6 +235,8 @@ public class RuleInventoryHolder implements InventoryHolder, Listener {
         FileConfiguration config = this.plugin.getConfig();
         ConfigurationSection rules = config.getConfigurationSection("rules");
         if (rules != null && tagStart()) {
+            boolean showAll = config.getBoolean("rules-show-all");
+
             int invRow = config.getInt("rules-row", 3);
             String invTitle = Optional.ofNullable(config.getString("rules-title")).orElse("Game Rule");
             if (!invTitle.isEmpty()) {
@@ -230,7 +252,16 @@ public class RuleInventoryHolder implements InventoryHolder, Listener {
                 for (GameRule<?> gameRule : GameRule.values()) {
                     ConfigurationSection ruleSection = rules.getConfigurationSection(gameRule.getName());
                     if (ruleSection == null) {
-                        continue;
+                        if (!showAll) {
+                            continue;
+                        }
+                        ruleSection = config.getConfigurationSection("rules-out-item");
+                        if (ruleSection == null) {
+                            ruleSection = new MemoryConfiguration();
+                            ruleSection.set("item", "enchanted_book");
+                            ruleSection.set("title", "§f%RULE%");
+                            ruleSection.set("description", Arrays.asList("§7%RULE%", "§5%VALUE%/%DEFAULT_VALUE%"));
+                        }
                     }
 
                     String title = Optional.ofNullable(ruleSection.getString("title")).orElse(gameRule.getName());

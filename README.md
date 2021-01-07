@@ -1,6 +1,6 @@
 # RuleEditor  
-支持版本： ```1.13 - 1.15.2```  
-构建环境 ：```java 8、craftbukkit 1.15.2```
+支持版本： ```1.13 - 1.16.4```  更高版本未测试  
+构建环境： ```java 8、spigot 1.16.4```
 
 ## 描述  
 ```RuleGame``` 可以以物品GUI的方式修改世界的游戏规则（gamerule）  
@@ -15,6 +15,7 @@ GUI物品信息可根据规则自定义
 命令插入到原版的命令中，权限依赖于原版权限  
 ```/gamerule editor``` 打开编辑当前世界规则的GUI  
 ```/gamerule editor reload``` 重新加载配置文件  
+```/gamerule editor disable``` (v1.1) 卸载本插件，只能非玩家执行  
 ```/gamerule editor help``` 显示命令和GUI操作方式  
 ```/gamerule editor [world]``` 打开编辑指定世界规则的GUI ```[world]``` 为世界名称
 
@@ -55,8 +56,23 @@ rules:
 
 # 图片  
 ```*图中游戏版本为1.13```  
-![image](./screenshots/screenshots0.png)
-![image](./screenshots/screenshots1.png)
+![image](./screenshots/screenshots2.png)
+![image](./screenshots/screenshots3.png)
+
+
+# 更新
+### v1.1
+0. 新增配置文件属性 ```rules-timeout``` 变更使用 ```中键``` 自定义数值时的等待时间，默认15秒  
+0. 新增配置文件属性 ```rules-show-all``` 是否显示未配置的规则，可自定义物品  
+0. 新增配置文件属性 ```rules-out-item``` 未配置规则的物品  
+0. 新增命令 ```/gamerule editor disable``` 卸载本插件，卸载后未退出的玩家仍然持有命令提示，但没有命令执行  
+   *只能非玩家执行  
+0. 修复使用命令重载配置时，没有配置文件时不会重新生成配置文件  
+0. 修复如果玩家不在所编辑的地图时，无法正确移除GUI数据  
+0. 修复未配置（有效）的规则会读取默认配置显示  
+0. 补全2个 ```1.16.4``` 规则配置  
+
+适配到了 ```1.16.4```  
 
 # Copyright  
 ```Copyright (c) 2020. InShin. All rights reserved.```

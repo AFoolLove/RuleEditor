@@ -50,10 +50,10 @@ public interface IExecutes<S> {
     static Optional<Entity> getContextEntity(@NotNull CommandContext<Object> context) {
         Class<?> sourceClazz = context.getSource().getClass();
         try {
-            // object net.minecraft.server.v1_15_R1.CommandListenerWrapper#getEntity
+            // object net.minecraft.server.v1_16_R3.CommandListenerWrapper#getEntity
             Object entity = sourceClazz.getMethod("getEntity").invoke(context.getSource());
             if (entity instanceof Entity) {
-                // object net.minecraft.server.v1_15_R1.Entity#getBukkitEntity
+                // object net.minecraft.server.v1_16_R3.Entity#getBukkitEntity
                 return Optional.ofNullable((Entity) entity.getClass().getMethod("getBukkitEntity").invoke(entity));
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -73,7 +73,7 @@ public interface IExecutes<S> {
     static Optional<CommandSender> getContextSender(@NotNull CommandContext<Object> context) {
         try {
             Class<?> sourceClazz = context.getSource().getClass();
-            // object net.minecraft.server.v1_15_R1.CommandListenerWrapper#getBukkitSender
+            // object net.minecraft.server.v1_16_R3.CommandListenerWrapper#getBukkitSender
             Object bukkitSender = sourceClazz.getMethod("getBukkitSender").invoke(context.getSource());
             if (bukkitSender instanceof CommandSender) {
                 return Optional.of((CommandSender) bukkitSender);

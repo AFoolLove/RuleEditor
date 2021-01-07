@@ -1,5 +1,6 @@
-# version 0
+# version 1
 # 规则描述来源于 WIKI https://minecraft-zh.gamepedia.com/%E5%91%BD%E4%BB%A4/gamerule
+# 本插件为开源插件 https://github.com/AFoolLove/RuleEditor
 
 # 支持 & 转 §
 # 变量 %RULE% 当前规则名称
@@ -20,7 +21,23 @@ rule-item: &rule-item
 # 变量 %WORLD_NAME% 获取当前世界的名称
 rules-title: '%WORLD_NAME% 的游戏规则'
 # GUI 格子大小，0 为自适应，最大为 6(6*9)
-rules-row: 3
+rules-row: 0
+
+# (v1.1) 列出未配置的规则
+rules-show-all: true
+# (v1.1) 未配置的规则物品
+rules-out-item:
+  # 物品名称
+  title: '§f%RULE%'
+  # 物品类型
+  item: 'enchanted_book'
+  # 物品描述
+  description:
+    - '§7%RULE%'
+    - '§5当前状态： %VALUE%'
+    - '§5默认状态： %DEFAULT_VALUE%'
+# (v1.1) 自定义数值时的超时时间，单位：秒（默认：15s
+rules-timeout: 15
 rules:
   # 规则名称，如果没有游戏本身没有该规则则无效
   announceAdvancements:
@@ -213,6 +230,16 @@ rules:
       - '§5当前状态： %VALUE%'
       - '§5默认状态： %DEFAULT_VALUE%'
 
+  forgiveDeadPlayers:
+    <<: *rule-item
+    title: '§f中立生物的目标死亡后恢复中立'
+    description:
+      - '§7%RULE%'
+      - '§5当被激怒的中立生物的目标玩家死亡时'
+      - '§5该生物是否恢复中立状态'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+
   keepInventory:
     item: 'totem_of_undying'
     title: '§f死亡不掉落'
@@ -331,6 +358,16 @@ rules:
     title: '§f旁观模式的玩家生成区块'
     description:
       - '§7%RULE%'
-      - '§5是否允许旁观模式的玩家生成区块'
+      - '§5是否允许旁观模式的玩家移动时生成区块'
       - '§5当前状态： %VALUE%'
       - '§5默认状态： %DEFAULT_VALUE%'
+
+  universalAnger:
+    <<: *rule-item
+    title: '§f中立生物是否攻击附近任何玩家'
+    description:
+      - '§7%RULE%'
+      - '§5被激怒的中立生物是否攻击附近任何玩家'
+      - '§5当前状态： %VALUE%'
+      - '§5默认状态： %DEFAULT_VALUE%'
+    
