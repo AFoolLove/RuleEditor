@@ -9,21 +9,16 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
-import net.minecraft.server.v1_16_R3.CommandOp;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.MemoryConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -37,26 +32,6 @@ public final class RuleEditor extends JavaPlugin {
     @Override
     public void onLoad() {
         saveDefaultConfig();
-//        File config = new File(getDataFolder(), "config.yml");
-//        if (!config.exists()) {
-//            InputStream resource = getResource("_config.yml");
-//            if (resource != null) {
-//                try (FileOutputStream fileOutputStream = new FileOutputStream(config)) {
-//                    byte[] buffer = new byte[Math.min(resource.available(), 0x0FFF)];
-//
-//                    while (resource.read(buffer) != -1) {
-//                        if (resource.available() < 0x0FFF) {
-//                            buffer = new byte[resource.available()];
-//                        }
-//                        fileOutputStream.write(buffer);
-//                    }
-//                    resource.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            saveResource("_config.yml", false);
-//        }
     }
 
     @Override
@@ -68,7 +43,7 @@ public final class RuleEditor extends JavaPlugin {
                 getServer().getConsoleSender().sendMessage("§4[RuleEditor] 如果你看到了这条信息，那真是太糟糕了。");
                 getServer().getConsoleSender().sendMessage("§4[RuleEditor] 非常遗憾，本插件无法在当前服务器版本中运行。");
                 getServer().getConsoleSender().sendMessage("§4[RuleEditor] 不妨试试在这里反馈请求兼容这个服务器。 https://github.com/AFoolLove/RuleEditor/issues");
-                getServer().getConsoleSender().sendMessage("§4[RuleEditor] 当前了，自己修复编译也是个不错的选择。 https://github.com/AFoolLove/RuleEditor");
+                getServer().getConsoleSender().sendMessage("§4[RuleEditor] 当然了，自己修复编译也是个不错的选择。 https://github.com/AFoolLove/RuleEditor");
 
                 getPluginLoader().disablePlugin(this);
                 return;
@@ -213,7 +188,7 @@ public final class RuleEditor extends JavaPlugin {
 
                 CommandNode<Object> gamerule = dispatcher.getRoot().getChild("gamerule");
                 CommandNode.class.getMethod("removeCommand", String.class).invoke(gamerule, "editor");
-            } 
+            }
         } catch (Exception e) {
             e.printStackTrace();
             getServer().getConsoleSender().sendMessage("[RuleEditor] 命令可能移除失败了。");
